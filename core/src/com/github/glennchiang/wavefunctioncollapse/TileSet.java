@@ -19,4 +19,8 @@ public class TileSet {
         int randomIndex = rand.nextInt(tiles.size());
         return tiles.get(randomIndex);
     }
+
+    public List<Tile> getTiles() {
+        return new ArrayList<>(this.tiles.values());
+    }
 }

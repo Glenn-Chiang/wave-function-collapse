@@ -2,7 +2,6 @@ package com.github.glennchiang.wavefunctioncollapse;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -40,7 +39,6 @@ public class WaveFunctionCollapse extends ApplicationAdapter {
 		TileSetLoader tileSetLoader = new TileSetLoader();
 		TileSet activeTileSet = tileSetLoader.getTileSet("overworld");
 		tileMap.setTileSet(activeTileSet);
-		tileMap.randomize();
 	}
 
 	@Override
