@@ -2,8 +2,6 @@ package com.github.glennchiang.wavefunctioncollapse;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -17,8 +15,8 @@ public class WaveFunctionCollapse extends ApplicationAdapter {
 	private Viewport viewport;
 	private ShapeRenderer shapeRenderer;
 
-	private Grid grid;
-	private GridDisplay gridDisplay;
+	private TileMap tilemap;
+	private MapDisplay mapDisplay;
 
 	@Override
 	public void create () {
@@ -26,22 +24,23 @@ public class WaveFunctionCollapse extends ApplicationAdapter {
 		viewport = new FitViewport(SCREEN_WIDTH, SCREEN_HEIGHT, camera);
 		shapeRenderer = new ShapeRenderer();
 
-		int gridRows = 8;
-		int gridCols = 8;
-		grid = new Grid(gridRows, gridCols);
+		int mapRows = 8;
+		int mapCols = 8;
+		tilemap = new TileMap(mapRows, mapCols);
 
-		int gridWidth = 600;
-		int gridHeight = 600;
-		gridDisplay = new GridDisplay((SCREEN_WIDTH - gridWidth) / 2, (SCREEN_HEIGHT - gridHeight) / 2,
-				gridWidth, gridHeight, grid, shapeRenderer);
+		int mapWidth = 600;
+		int mapHeight = 600;
+		mapDisplay = new MapDisplay((SCREEN_WIDTH - mapWidth) / 2, (SCREEN_HEIGHT - mapHeight) / 2,
+				mapWidth, mapHeight, tilemap, shapeRenderer);
 
+		TileSetLoader tileSetLoader = new TileSetLoader();
 	}
 
 	@Override
 	public void render () {
 		ScreenUtils.clear(0, 0, 0, 1);
 
-		gridDisplay.render();
+		mapDisplay.render();
 	}
 
 	@Override
