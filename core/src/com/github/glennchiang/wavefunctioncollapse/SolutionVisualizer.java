@@ -11,7 +11,7 @@ public class SolutionVisualizer {
     private TileMap currentStep = null;
 
     private boolean isRunning = false;
-    private float stepInterval = 0.1f;
+    private float stepInterval = 0.05f;
     private float stepTimer = stepInterval;
 
     public SolutionVisualizer(TileMapDisplayer tileMapDisplayer) {
