@@ -10,7 +10,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class WaveFunctionCollapse extends ApplicationAdapter {
 	public final static int SCREEN_WIDTH = 800;
-	public final static int SCREEN_HEIGHT = 640;
+	public final static int SCREEN_HEIGHT = 800;
 
 	private OrthographicCamera camera;
 	private Viewport viewport;
@@ -31,8 +31,8 @@ public class WaveFunctionCollapse extends ApplicationAdapter {
 		int mapCols = 16;
 		tileMap = new TileMap(mapRows, mapCols);
 
-		int mapWidth = 600;
-		int mapHeight = 600;
+		int mapWidth = 640;
+		int mapHeight = 640;
 		tileMapDisplayer = new TileMapDisplayer((SCREEN_WIDTH - mapWidth) / 2, (SCREEN_HEIGHT - mapHeight) / 2,
 				mapWidth, mapHeight, tileMap, shapeRenderer, spriteBatch);
 
