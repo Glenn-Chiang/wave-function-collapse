@@ -8,7 +8,7 @@ import java.util.Random;
 public class SuperTile {
     public final int row;
     public final int col;
-    private List<Tile> states;
+    private final List<Tile> states;
 
     public SuperTile(int row, int col, List<Tile> states) {
         this.row = row;
@@ -23,9 +23,10 @@ public class SuperTile {
         this.states = new ArrayList<>(tile.states);
     }
 
-    // Randomly select one of the remaining states,
-    // then remove all other tiles to reduce the SuperTile to a single state
     public void collapse() {
+        if (collapsed()) return;
+        // Randomly select one of the remaining states,
+        // then remove all other tiles to reduce the SuperTile to a single state
         Random rand = new Random();
         int randomIndex = rand.nextInt(states.size());
         Tile selectedTile = states.get(randomIndex);

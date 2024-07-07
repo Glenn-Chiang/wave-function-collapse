@@ -5,8 +5,10 @@ import java.util.*;
 // The actual WFC algorithm
 public class WaveFunctionCollapseAlgorithm {
     // Directions in which the wave can propagate
-    private int[][] directions = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
-    public WaveFunctionCollapseAlgorithm() {}
+    private int[][] directions = {{0, 1}, {-1, 0}, {0, -1}, {1, 0}};
+
+    public WaveFunctionCollapseAlgorithm() {
+    }
 
     public List<TileMap> generate(TileSet tileSet, TileMap tileMap) {
         // Initialize a SuperTile at each cell in the grid
@@ -20,36 +22,40 @@ public class WaveFunctionCollapseAlgorithm {
         // Save the successive states of the tilemap as the algorithm progresses
         List<TileMap> tileMapStates = new ArrayList<>();
 
+        // Queue of tiles to propagate
+        Queue<SuperTile> queue = new LinkedList<>();
+
         // Loop until all tiles have collapsed
         while (!tileMap.collapsed()) {
-            // Among the tiles that have not collapsed, find the tile with the lowest entropy
-            SuperTile currentTile = tileMap.getTiles().stream().filter(tile -> !tile.collapsed())
-                    .min(Comparator.comparingInt(SuperTile::getEntropy)).orElse(null);
-            currentTile.collapse();
+            // Retrieve and remove first tile in queue
+            SuperTile currentTile = queue.poll();
+            // If queue is empty, select the tile with the lowest entropy among the tiles that have not collapsed
+            if (currentTile == null) {
+                currentTile = tileMap.getTiles().stream().filter(tile -> !tile.collapsed())
+                        .min(Comparator.comparingInt(SuperTile::getEntropy)).orElse(null);
+                // Collapse the selected tile
+                currentTile.collapse();
+            }
 
-            propagate(currentTile, tileMap, tileMapStates);
+            for (int[] dir : directions) {
+                SuperTile neighbor = tileMap.getTile(currentTile.row + dir[0], currentTile.col + dir[1]);
+                // Skip neighbors that have already collapsed
+                if (neighbor == null || neighbor.collapsed()) continue;
+
+                // Reduce the states of each neighbor to only include states
+                // that are allowed to be adjacent to the current collapsed tile
+                List<Tile> allowedNeighbors = currentTile.collapsedTile().allowedNeighbors;
+                neighbor.reduce(allowedNeighbors);
+                // If neighbors was collapsed, add it to the queue to propagate the collapse
+                if (neighbor.collapsed()) {
+                    queue.add(neighbor);
+                }
+            }
 
             // Save a copy of the current state of the tilemap
             tileMapStates.add(new TileMap(tileMap));
         }
 
         return tileMapStates;
-    }
-
-    private void propagate(SuperTile currentTile, TileMap tileMap, List<TileMap> tileMapStates) {
-        // Get neighbors of current tile
-        for (int[] dir: directions) {
-            SuperTile neighbor = tileMap.getTile(currentTile.row + dir[0], currentTile.col + dir[1]);
-            if (neighbor == null || neighbor.collapsed()) continue;
-
-            // Reduce the states of each neighbor to only include states
-            // that are allowed to be adjacent to the current collapsed tile
-            List<Tile> allowedNeighbors = currentTile.collapsedTile().allowedNeighbors;
-            neighbor.reduce(allowedNeighbors);
-            if (neighbor.collapsed()) {
-                propagate(neighbor, tileMap, tileMapStates);
-            }
-        }
-        tileMapStates.add(new TileMap(tileMap));
     }
 }
