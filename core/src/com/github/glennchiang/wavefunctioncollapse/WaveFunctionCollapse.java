@@ -8,6 +8,8 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.List;
+
 public class WaveFunctionCollapse extends ApplicationAdapter {
 	public final static int SCREEN_WIDTH = 800;
 	public final static int SCREEN_HEIGHT = 800;
@@ -19,6 +21,7 @@ public class WaveFunctionCollapse extends ApplicationAdapter {
 
 	private TileMap tileMap;
 	private TileMapDisplayer tileMapDisplayer;
+	private SolutionVisualizer visualizer;
 
 	@Override
 	public void create () {
@@ -34,21 +37,24 @@ public class WaveFunctionCollapse extends ApplicationAdapter {
 		int mapWidth = 640;
 		int mapHeight = 640;
 		tileMapDisplayer = new TileMapDisplayer((SCREEN_WIDTH - mapWidth) / 2, (SCREEN_HEIGHT - mapHeight) / 2,
-				mapWidth, mapHeight, tileMap, shapeRenderer, spriteBatch);
+				mapWidth, mapHeight, mapRows, mapCols, shapeRenderer, spriteBatch);
 
 		TileSetLoader tileSetLoader = new TileSetLoader();
 		TileSet activeTileSet = tileSetLoader.getTileSet("overworld");
 
 		WaveFunctionCollapseAlgorithm algorithm = new WaveFunctionCollapseAlgorithm();
-		algorithm.generate(activeTileSet, tileMap);
+		List<TileMap> solutionStates = algorithm.generate(activeTileSet, tileMap);
 
+		visualizer = new SolutionVisualizer(tileMapDisplayer);
+		visualizer.setSolution(solutionStates);
+		visualizer.run();
 	}
 
 	@Override
 	public void render () {
 		ScreenUtils.clear(0, 0, 0, 1);
 
-		tileMapDisplayer.render();
+		visualizer.update();
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.github.glennchiang.wavefunctioncollapse;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -19,7 +20,7 @@ public class SuperTile {
     public SuperTile(SuperTile tile) {
         this.row = tile.row;
         this.col = tile.col;
-        this.states = tile.states;
+        this.states = new ArrayList<>(tile.states);
     }
 
     // Randomly select one of the remaining states,

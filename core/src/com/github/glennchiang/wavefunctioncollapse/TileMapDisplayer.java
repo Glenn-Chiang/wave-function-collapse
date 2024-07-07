@@ -7,14 +7,12 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import java.awt.*;
 
 public class TileMapDisplayer {
-    private final TileMap tilemap;
     private final Rectangle grid;
     private final Rectangle[][] cells;
     private final ShapeRenderer shapeRenderer;
     private final SpriteBatch spriteBatch;
 
-    public TileMapDisplayer(int x, int y, int width, int height, TileMap tilemap, ShapeRenderer renderer, SpriteBatch spriteBatch) {
-        this.tilemap = tilemap;
+    public TileMapDisplayer(int x, int y, int width, int height, int rows, int cols, ShapeRenderer renderer, SpriteBatch spriteBatch) {
         this.shapeRenderer = renderer;
         this.spriteBatch = spriteBatch;
 
@@ -22,11 +20,11 @@ public class TileMapDisplayer {
         grid = new Rectangle(x, y, width, height);
 
         // Create cell rectangles
-        int cellWidth = width / tilemap.COLS;
-        int cellHeight = height / tilemap.ROWS;
-        cells = new Rectangle[tilemap.ROWS][tilemap.COLS];
-        for (int i = 0; i < tilemap.ROWS; i++) {
-            for (int j = 0; j < tilemap.COLS; j++) {
+        int cellWidth = width / cols;
+        int cellHeight = height / rows;
+        cells = new Rectangle[rows][cols];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
                 Rectangle cell = new Rectangle(x + j * cellWidth, y + height - (i + 1) * cellHeight,
                         cellWidth, cellHeight);
                 cells[i][j] = cell;
@@ -34,13 +32,12 @@ public class TileMapDisplayer {
         }
     }
 
-    // Should be called every frame in main render loop
-    public void render() {
-        for (int i = 0; i < tilemap.ROWS; i++) {
-            for (int j = 0; j < tilemap.COLS; j++) {
+    public void render(TileMap tileMap) {
+        for (int i = 0; i < tileMap.ROWS; i++) {
+            for (int j = 0; j < tileMap.COLS; j++) {
                 Rectangle cell = cells[i][j];
 
-                Tile tile = tilemap.getTile(i, j).collapsedTile();
+                Tile tile = tileMap.getTile(i, j).collapsedTile();
                 // Draw cell outline if tile has not collapsed
                 if (tile == null) {
                     shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
