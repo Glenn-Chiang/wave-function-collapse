@@ -27,21 +27,29 @@ public class WaveFunctionCollapseAlgorithm {
                     .min(Comparator.comparingInt(SuperTile::getEntropy)).orElse(null);
             currentTile.collapse();
 
-            // Get neighbors of current tile
-            for (int[] dir: directions) {
-                SuperTile neighbor = tileMap.getTile(currentTile.row + dir[0], currentTile.col + dir[1]);
-                if (neighbor == null || neighbor.collapsed()) continue;
-
-                // Reduce the states of each neighbor to only include states
-                // that are allowed to be adjacent to the current collapsed tile
-                List<Tile> allowedNeighbors = currentTile.collapsedTile().allowedNeighbors;
-                neighbor.reduce(allowedNeighbors);
-            }
+            propagate(currentTile, tileMap, tileMapStates);
 
             // Save a copy of the current state of the tilemap
             tileMapStates.add(new TileMap(tileMap));
         }
 
         return tileMapStates;
+    }
+
+    private void propagate(SuperTile currentTile, TileMap tileMap, List<TileMap> tileMapStates) {
+        // Get neighbors of current tile
+        for (int[] dir: directions) {
+            SuperTile neighbor = tileMap.getTile(currentTile.row + dir[0], currentTile.col + dir[1]);
+            if (neighbor == null || neighbor.collapsed()) continue;
+
+            // Reduce the states of each neighbor to only include states
+            // that are allowed to be adjacent to the current collapsed tile
+            List<Tile> allowedNeighbors = currentTile.collapsedTile().allowedNeighbors;
+            neighbor.reduce(allowedNeighbors);
+            if (neighbor.collapsed()) {
+                propagate(neighbor, tileMap, tileMapStates);
+            }
+        }
+        tileMapStates.add(new TileMap(tileMap));
     }
 }
