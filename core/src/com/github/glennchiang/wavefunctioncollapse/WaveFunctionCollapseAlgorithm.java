@@ -8,7 +8,7 @@ public class WaveFunctionCollapseAlgorithm {
     private int[][] directions = {{-1, 0}, {1, 0}, {0, 1}, {0, -1}};
     public WaveFunctionCollapseAlgorithm() {}
 
-    public void generate(TileSet tileSet, TileMap tileMap) {
+    public List<TileMap> generate(TileSet tileSet, TileMap tileMap) {
         // Initialize a SuperTile at each cell in the grid
         for (int i = 0; i < tileMap.ROWS; i++) {
             for (int j = 0; j < tileMap.COLS; j++) {
@@ -16,6 +16,9 @@ public class WaveFunctionCollapseAlgorithm {
                 tileMap.setTile(i, j, new SuperTile(i, j, tileSet.getTiles()));
             }
         }
+
+        // Save the successive states of the tilemap as the algorithm progresses
+        List<TileMap> tileMapStates = new ArrayList<>();
 
         // Loop until all tiles have collapsed
         while (!tileMap.collapsed()) {
@@ -35,6 +38,10 @@ public class WaveFunctionCollapseAlgorithm {
                 neighbor.reduce(allowedNeighbors);
             }
 
+            // Save a copy of the current state of the tilemap
+            tileMapStates.add(new TileMap(tileMap));
         }
+
+        return tileMapStates;
     }
 }

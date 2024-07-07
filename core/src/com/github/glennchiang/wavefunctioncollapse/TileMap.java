@@ -15,6 +15,19 @@ public class TileMap {
         grid = new SuperTile[rows][cols];
     }
 
+    // Create a deep copy of the TileMap
+    public TileMap(TileMap tileMap) {
+        this.ROWS = tileMap.ROWS;
+        this.COLS = tileMap.COLS;;
+        this.grid = new SuperTile[ROWS][COLS];
+        for (int i = 0; i < tileMap.ROWS; i++) {
+            for (int j = 0; j < tileMap.COLS; j++) {
+                // Create copy of each SuperTile
+                this.grid[i][j] = new SuperTile(tileMap.grid[i][j]);
+            }
+        }
+    }
+
     // Check if all SuperTiles in the grid have collapsed
     public boolean collapsed() {
         for (int i = 0; i < ROWS; i++) {

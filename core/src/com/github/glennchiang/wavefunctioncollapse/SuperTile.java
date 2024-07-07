@@ -15,6 +15,13 @@ public class SuperTile {
         this.states = states;
     }
 
+    // Creates a copy of a SuperTile
+    public SuperTile(SuperTile tile) {
+        this.row = tile.row;
+        this.col = tile.col;
+        this.states = tile.states;
+    }
+
     // Randomly select one of the remaining states,
     // then remove all other tiles to reduce the SuperTile to a single state
     public void collapse() {
