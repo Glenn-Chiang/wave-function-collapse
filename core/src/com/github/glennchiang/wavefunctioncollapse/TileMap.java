@@ -1,11 +1,13 @@
 package com.github.glennchiang.wavefunctioncollapse;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class TileMap {
     public final int ROWS;
     public final int COLS;
     private final SuperTile[][] grid;
-
-    private TileSet tileSet;
 
     public TileMap(int rows, int cols) {
         ROWS = rows;
@@ -13,18 +15,43 @@ public class TileMap {
         grid = new SuperTile[rows][cols];
     }
 
-    public void setTileSet(TileSet tileSet) {
-        this.tileSet = tileSet;
-        // Initialize a SuperTile at each cell in the grid
+    // Check if all SuperTiles in the grid have collapsed
+    public boolean collapsed() {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLS; j++) {
-                // Set the initial state of the SuperTile to include all tiles in the tileset
-                grid[i][j] = new SuperTile(tileSet.getTiles());
+                if (!grid[i][j].collapsed()) {
+                    return false;
+                }
             }
+        }
+        return true;
+    }
+
+    public int cellCount() {
+        return ROWS * COLS;
+    }
+
+    public void setTile(int row, int col, SuperTile tile) {
+        grid[row][col] = tile;
+    }
+
+    public List<SuperTile> getTiles() {
+        List<SuperTile> tiles = new ArrayList<>();
+        for (int i = 0; i < ROWS; i++) {
+            tiles.addAll(Arrays.asList(grid[i]).subList(0, COLS));
+        }
+        return tiles;
+    }
+
+    public SuperTile getTile(int row, int col) {
+        if (inBounds(row, col)) {
+            return grid[row][col];
+        } else {
+            return null;
         }
     }
 
-    public Tile getTile(int row, int col) {
-        return grid[row][col].getTile();
+    private boolean inBounds(int row, int col) {
+        return row >= 0 && col >= 0 && row < ROWS && col < COLS;
     }
 }

@@ -45,7 +45,7 @@ public class TileMapDisplayer {
                 Rectangle cell = cells[i][j];
 
                 // Draw tile image
-                Tile tile = tilemap.getTile(i, j);
+                Tile tile = tilemap.getTile(i, j).collapsedTile();
                 if (tile != null) {
                     spriteBatch.begin();
                     spriteBatch.draw(tile.image, cell.x, cell.y, cell.width, cell.height);

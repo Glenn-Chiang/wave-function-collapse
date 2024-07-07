@@ -27,8 +27,8 @@ public class WaveFunctionCollapse extends ApplicationAdapter {
 		shapeRenderer = new ShapeRenderer();
 		spriteBatch = new SpriteBatch();
 
-		int mapRows = 8;
-		int mapCols = 8;
+		int mapRows = 16;
+		int mapCols = 16;
 		tileMap = new TileMap(mapRows, mapCols);
 
 		int mapWidth = 600;
@@ -38,7 +38,10 @@ public class WaveFunctionCollapse extends ApplicationAdapter {
 
 		TileSetLoader tileSetLoader = new TileSetLoader();
 		TileSet activeTileSet = tileSetLoader.getTileSet("overworld");
-		tileMap.setTileSet(activeTileSet);
+
+		WaveFunctionCollapseAlgorithm algorithm = new WaveFunctionCollapseAlgorithm();
+		algorithm.generate(activeTileSet, tileMap);
+
 	}
 
 	@Override

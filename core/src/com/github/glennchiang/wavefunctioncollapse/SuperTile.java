@@ -5,9 +5,13 @@ import java.util.Random;
 
 // A SuperTile contains multiple potential Tiles that it can be
 public class SuperTile {
+    public final int row;
+    public final int col;
     private List<Tile> states;
 
-    public SuperTile(List<Tile> states) {
+    public SuperTile(int row, int col, List<Tile> states) {
+        this.row = row;
+        this.col = col;
         this.states = states;
     }
 
@@ -26,13 +30,18 @@ public class SuperTile {
         states.removeIf(state -> !allowedStates.contains(state));
     }
 
-    // The SuperTile is collapsed when it is reduced to a single state
-    private boolean collapsed() {
+    // The SuperTile is considered to be collapsed when it has been reduced to a single state
+    public boolean collapsed() {
         return states.size() == 1;
     }
 
+    // The entropy of a SuperTile refers to the number of states/superpositions it currently has
+    public int getEntropy() {
+        return states.size();
+    }
+
     // If the SuperTile has collapsed, return the single Tile state that it has been reduced to
-    public Tile getTile() {
+    public Tile collapsedTile() {
         if (collapsed()) {
             return states.get(0);
         } else {
