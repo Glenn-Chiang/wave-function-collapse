@@ -12,7 +12,9 @@ public class VisualizationController {
     private final TileMapRenderer tileMapRenderer;
     private Iterator<TileMap> stepIterator;
     private TileMap currentStep = null;
-    private float stepInterval = 0.05f;
+
+    public final float[] stepIntervals = { 0.05f, 0.025f, 0.001f, 0.00001f };
+    private float stepInterval = stepIntervals[0];
     private float stepTimer = stepInterval;
 
     public enum State {
@@ -31,7 +33,15 @@ public class VisualizationController {
         this.tileMap = tileMap;
     }
 
+    public void setStepInterval(int index) {
+        if (index < 0 || index >= stepIntervals.length) return;
+        stepInterval = stepIntervals[index];
+    }
+
     public void run() {
+        if (state == State.RUNNING) {
+            reset();
+        }
         state = State.RUNNING;
         stepTimer = stepInterval;
         // Generate a list of tilemap states that progress toward the final generated tilemap
