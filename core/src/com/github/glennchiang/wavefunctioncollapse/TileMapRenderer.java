@@ -6,40 +6,44 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.awt.*;
 
-public class TileMapDisplayer {
+public class TileMapRenderer {
     private final Rectangle grid;
-    private final Rectangle[][] cells;
     private final ShapeRenderer shapeRenderer;
     private final SpriteBatch spriteBatch;
 
-    public TileMapDisplayer(int x, int y, int width, int height, int rows, int cols, ShapeRenderer renderer, SpriteBatch spriteBatch) {
+    public TileMapRenderer(int x, int y, int width, int height, ShapeRenderer renderer, SpriteBatch spriteBatch) {
         this.shapeRenderer = renderer;
         this.spriteBatch = spriteBatch;
 
-        // Create grid rectangle
+        // Create rectangle for grid frame
         grid = new Rectangle(x, y, width, height);
+    }
 
-        // Create cell rectangles
-        int cellWidth = width / cols;
-        int cellHeight = height / rows;
-        cells = new Rectangle[rows][cols];
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                Rectangle cell = new Rectangle(x + j * cellWidth, y + height - (i + 1) * cellHeight,
+    // Create cells based on the given tileMap's dimensions
+    public Rectangle[][] createCells(TileMap tileMap) {
+        Rectangle[][] cells = new Rectangle[tileMap.getRows()][tileMap.getCols()];
+        int cellWidth = grid.width / tileMap.getCols();
+        int cellHeight = grid.height / tileMap.getRows();
+        for (int i = 0; i < tileMap.getRows(); i++) {
+            for (int j = 0; j < tileMap.getCols(); j++) {
+                Rectangle cell = new Rectangle(grid.x + j * cellWidth, grid.y + grid.height - (i + 1) * cellHeight,
                         cellWidth, cellHeight);
                 cells[i][j] = cell;
             }
         }
+        return cells;
     }
 
     public void render(TileMap tileMap) {
-        for (int i = 0; i < tileMap.ROWS; i++) {
-            for (int j = 0; j < tileMap.COLS; j++) {
+        Rectangle[][] cells = createCells(tileMap);
+
+        for (int i = 0; i < tileMap.getRows(); i++) {
+            for (int j = 0; j < tileMap.getCols(); j++) {
                 Rectangle cell = cells[i][j];
 
-                Tile tile = tileMap.getTile(i, j).collapsedTile();
-                // Draw cell outline if tile has not collapsed
-                if (tile == null) {
+                SuperTile tile = tileMap.getTile(i, j);
+                // Draw cell outline if there is no tile at this position or the tile has not collapsed
+                if (tile == null || !tile.collapsed()) {
                     shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
                     shapeRenderer.setColor(Color.WHITE);
                     shapeRenderer.rect(cell.x, cell.y, cell.width, cell.height);
@@ -47,7 +51,7 @@ public class TileMapDisplayer {
                 // Draw tile image if tile has collapsed
                 } else {
                     spriteBatch.begin();
-                    spriteBatch.draw(tile.image, cell.x, cell.y, cell.width, cell.height);
+                    spriteBatch.draw(tile.collapsedTile().image, cell.x, cell.y, cell.width, cell.height);
                     spriteBatch.end();
                 }
             }

@@ -5,15 +5,12 @@ import java.util.*;
 // The actual WFC algorithm
 public class WaveFunctionCollapseAlgorithm {
     // Directions in which the wave can propagate
-    private int[][] directions = {{0, 1}, {-1, 0}, {0, -1}, {1, 0}};
+    private static int[][] directions = {{0, 1}, {-1, 0}, {0, -1}, {1, 0}};
 
-    public WaveFunctionCollapseAlgorithm() {
-    }
-
-    public List<TileMap> generate(TileSet tileSet, TileMap tileMap) {
+    public static List<TileMap> generate(TileSet tileSet, TileMap tileMap) {
         // Initialize a SuperTile at each cell in the grid
-        for (int i = 0; i < tileMap.ROWS; i++) {
-            for (int j = 0; j < tileMap.COLS; j++) {
+        for (int i = 0; i < tileMap.getRows(); i++) {
+            for (int j = 0; j < tileMap.getCols(); j++) {
                 // Set the initial state of the SuperTile to include all tiles in the tileset
                 tileMap.setTile(i, j, new SuperTile(i, j, tileSet.getTiles()));
             }
@@ -38,7 +35,12 @@ public class WaveFunctionCollapseAlgorithm {
             }
 
             for (int[] dir : directions) {
-                SuperTile neighbor = tileMap.getTile(currentTile.row + dir[0], currentTile.col + dir[1]);
+                int nextRow = currentTile.row + dir[0];
+                int nextCol = currentTile.col + dir[1];
+
+                if (!tileMap.inBounds(nextRow, nextCol)) continue;
+
+                SuperTile neighbor = tileMap.getTile(nextRow, nextCol);
                 // Skip neighbors that have already collapsed
                 if (neighbor == null || neighbor.collapsed()) continue;
 
@@ -53,7 +55,8 @@ public class WaveFunctionCollapseAlgorithm {
             }
 
             // Save a copy of the current state of the tilemap
-            tileMapStates.add(new TileMap(tileMap));
+            TileMap savedState = new TileMap(tileMap);
+            tileMapStates.add(savedState);
         }
 
         return tileMapStates;

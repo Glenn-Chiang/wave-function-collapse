@@ -7,13 +7,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.Widget;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.github.glennchiang.wavefunctioncollapse.ui.WidgetConfig;
-
-import java.util.List;
 
 public class WaveFunctionCollapse extends ApplicationAdapter {
 	public final static int SCREEN_WIDTH = 800;
@@ -26,8 +23,8 @@ public class WaveFunctionCollapse extends ApplicationAdapter {
 	private Stage stage;
 
 	private TileMap tileMap;
-	private TileMapDisplayer tileMapDisplayer;
-	private SolutionVisualizer visualizer;
+	private TileMapRenderer tileMapDisplay;
+	private VisualizationController visualizer;
 
 	@Override
 	public void create () {
@@ -38,35 +35,29 @@ public class WaveFunctionCollapse extends ApplicationAdapter {
 
 		// Set up stage
 		stage = new Stage(viewport);
+		Gdx.input.setInputProcessor(stage);
 		Table rootTable = new Table();
 		rootTable.setFillParent(true);
 		stage.addActor(rootTable);
 
 		// Set up tile map
-		int mapRows = 32;
-		int mapCols = 32;
+		int mapRows = 16;
+		int mapCols = 16;
 		tileMap = new TileMap(mapRows, mapCols);
 
 		// Set up tile map display
 		int mapWidth = 640;
 		int mapHeight = 640;
-		tileMapDisplayer = new TileMapDisplayer((SCREEN_WIDTH - mapWidth) / 2, (SCREEN_HEIGHT - mapHeight) / 2,
-				mapWidth, mapHeight, mapRows, mapCols, shapeRenderer, spriteBatch);
+		tileMapDisplay = new TileMapRenderer((SCREEN_WIDTH - mapWidth) / 2, (SCREEN_HEIGHT - mapHeight) / 2,
+				mapWidth, mapHeight, shapeRenderer, spriteBatch);
 
 		// Load tile sets
 		TileSetLoader tileSetLoader = new TileSetLoader();
-		TileSet activeTileSet = tileSetLoader.getTileSet("overworld");
 
-		WaveFunctionCollapseAlgorithm algorithm = new WaveFunctionCollapseAlgorithm();
-		List<TileMap> solutionStates = algorithm.generate(activeTileSet, tileMap);
-
-		// Set up visualizer
-		visualizer = new SolutionVisualizer(tileMapDisplayer);
-		visualizer.setSolution(solutionStates);
-		visualizer.run();
+		visualizer = new VisualizationController(tileSetLoader, tileMap, tileMapDisplay);
 
 		// Set up widgets
-		WidgetConfig widgetConfig = new WidgetConfig();
+		WidgetConfig widgetConfig = new WidgetConfig(visualizer);
 		widgetConfig.addToLayout(rootTable).expand().top().width(mapWidth).height((SCREEN_HEIGHT - mapHeight) / 2);
 	}
 
@@ -75,10 +66,11 @@ public class WaveFunctionCollapse extends ApplicationAdapter {
 		ScreenUtils.clear(0, 0, 0, 1);
 		camera.update();
 
+		visualizer.update();
+
 		stage.act(Gdx.graphics.getDeltaTime());
 		stage.draw();
 
-		visualizer.update();
 	}
 
 	@Override
