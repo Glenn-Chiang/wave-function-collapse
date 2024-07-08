@@ -6,8 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 public class VisualizationController {
-    private final TileSetLoader tileSetLoader;
-    private TileSet currentTileSet;
+    private TileSet tileSet;
     public final TileMap tileMap;
     private final TileMapRenderer tileMapRenderer;
     private Iterator<TileMap> stepIterator;
@@ -22,15 +21,14 @@ public class VisualizationController {
     }
 
     private State state = State.INACTIVE;
-    public State getState() {
-        return state;
+
+    public VisualizationController(TileMap tileMap, TileMapRenderer tileMapRenderer) {
+        this.tileMapRenderer = tileMapRenderer;
+        this.tileMap = tileMap;
     }
 
-    public VisualizationController(TileSetLoader tileSetLoader, TileMap tileMap, TileMapRenderer tileMapRenderer) {
-        this.tileSetLoader = tileSetLoader;
-        this.tileMapRenderer = tileMapRenderer;
-        currentTileSet = tileSetLoader.getTileSet("overworld");
-        this.tileMap = tileMap;
+    public void setTileSet(TileSet tileSet) {
+        this.tileSet = tileSet;
     }
 
     public void setStepInterval(int index) {
@@ -45,7 +43,7 @@ public class VisualizationController {
         state = State.RUNNING;
         stepTimer = stepInterval;
         // Generate a list of tilemap states that progress toward the final generated tilemap
-        List<TileMap> solutionStates = WaveFunctionCollapseAlgorithm.generate(currentTileSet, tileMap);
+        List<TileMap> solutionStates = WaveFunctionCollapseAlgorithm.generate(tileSet, tileMap);
         stepIterator = solutionStates.iterator();
         currentStep = stepIterator.next();
     }

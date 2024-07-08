@@ -4,10 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 // Loads tile sets from the assets directory
 public class TileSetLoader {
@@ -42,5 +39,9 @@ public class TileSetLoader {
     // Gets a tileset by name
     public TileSet getTileSet(String name) {
         return tileSets.get(name);
+    }
+
+    public Set<String> getTileSets() {
+        return tileSets.keySet();
     }
 }
