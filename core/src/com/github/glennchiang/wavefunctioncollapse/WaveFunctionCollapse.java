@@ -41,6 +41,7 @@ public class WaveFunctionCollapse extends ApplicationAdapter {
 		stage.addActor(rootTable);
 
 		// Set up tile map
+		int[][] tileMapDimensions = {{8, 8}, {16, 16}, {32, 32}, {64, 64}};
 		int mapRows = 16;
 		int mapCols = 16;
 		tileMap = new TileMap(mapRows, mapCols);
@@ -57,7 +58,7 @@ public class WaveFunctionCollapse extends ApplicationAdapter {
 		visualizer = new VisualizationController(tileSetLoader, tileMap, tileMapDisplay);
 
 		// Set up widgets
-		WidgetConfig widgetConfig = new WidgetConfig(visualizer);
+		WidgetConfig widgetConfig = new WidgetConfig(visualizer, tileMapDimensions);
 		widgetConfig.addToLayout(rootTable).expand().top().width(mapWidth).height((SCREEN_HEIGHT - mapHeight) / 2);
 	}
 

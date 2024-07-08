@@ -8,7 +8,7 @@ import java.util.List;
 public class VisualizationController {
     private final TileSetLoader tileSetLoader;
     private TileSet currentTileSet;
-    private final TileMap tileMap;
+    public final TileMap tileMap;
     private final TileMapRenderer tileMapRenderer;
     private Iterator<TileMap> stepIterator;
     private TileMap currentStep = null;
