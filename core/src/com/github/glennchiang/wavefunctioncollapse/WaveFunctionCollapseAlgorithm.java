@@ -17,7 +17,7 @@ public class WaveFunctionCollapseAlgorithm {
         }
 
         // Save the successive states of the tilemap as the algorithm progresses
-        List<TileMap> tileMapStates = new ArrayList<>();
+        List<TileMap> solutionStates = new ArrayList<>();
 
         // Queue of tiles to propagate
         Queue<SuperTile> queue = new LinkedList<>();
@@ -55,10 +55,10 @@ public class WaveFunctionCollapseAlgorithm {
             }
 
             // Save a copy of the current state of the tilemap
-            TileMap savedState = new TileMap(tileMap);
-            tileMapStates.add(savedState);
+            solutionStates.add(new TileMap(tileMap));
         }
 
-        return tileMapStates;
+        System.out.println(solutionStates.size());
+        return solutionStates;
     }
 }

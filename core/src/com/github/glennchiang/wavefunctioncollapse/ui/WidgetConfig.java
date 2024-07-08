@@ -63,7 +63,7 @@ public class WidgetConfig {
         Label speedLabel = widgetFactory.createLabel("Speed");
 
         // Run button
-        Button runButton = widgetFactory.createButton("Run", Color.valueOf("#03A9F4"));
+        Button runButton = widgetFactory.createButton("Run", Color.valueOf("#58D68D"));
         runButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -71,6 +71,7 @@ public class WidgetConfig {
                 // User cannot run visualizer or change grid dimensions when visualizer is already running
                 runButton.setDisabled(true);
                 gridSelectBox.setDisabled(true);
+                tileSetSelectBox.setDisabled(true);
             }
         });
 
@@ -82,24 +83,27 @@ public class WidgetConfig {
                 visualizer.reset();
                 runButton.setDisabled(false);
                 gridSelectBox.setDisabled(false);
+                tileSetSelectBox.setDisabled(false);
             }
         });
 
         // Table to act as container for the other widgets
         table = new Table();
+//        table.setDebug(true);
         table.bottom().left().padBottom(8);
 
-        table.add(tileSetLabel).width(48).height(32).spaceRight(8);
-        table.add(tileSetSelectBox).width(80).height(32).spaceRight(16);
+        table.add(tileSetLabel).height(32).expandX();
+        table.add(tileSetSelectBox).height(32).expandX().fill();
 
-        table.add(gridLabel).width(32).height(32).spaceRight(8);
-        table.add(gridSelectBox).width(64).height(32).spaceRight(16);
+        table.add(gridLabel).height(32).expandX();
+        table.add(gridSelectBox).height(32).expandX().fill();
 
-        table.add(speedLabel).width(48).height(32).spaceRight(8);
-        table.add(speedSelectBox).width(64).height(32).spaceRight(32);
+        table.add(speedLabel).height(32).expandX();
+        table.add(speedSelectBox).height(32).expandX().fill();
 
-        table.add(runButton).width(80).height(32).spaceRight(8);
-        table.add(resetButton).width(80).height(32).spaceRight(16);
+        table.add(runButton).width(80).height(32).expandX().fill().right();
+        table.add(resetButton).width(80).height(32).expandX().fill().right();
+
     }
 
     public Cell<Table> addToLayout(Table rootTable) {

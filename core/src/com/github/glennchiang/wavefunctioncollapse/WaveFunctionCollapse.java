@@ -42,7 +42,7 @@ public class WaveFunctionCollapse extends ApplicationAdapter {
 
 		// Set up tile map with default dimensions 16 x 16
 		int[][] tileMapDimensions = {{8, 8}, {16, 16}, {32, 32}, {64, 64}};
-		tileMap = new TileMap(tileMapDimensions[1][0], tileMapDimensions[1][1]);
+		tileMap = new TileMap(tileMapDimensions[0][0], tileMapDimensions[0][0]);
 
 		// Set up tile map display
 		int mapWidth = 640;
