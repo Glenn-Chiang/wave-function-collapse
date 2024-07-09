@@ -1,0 +1,20 @@
+{
+  "dirt": {
+    "up": ["dirt", "grass"],
+    "down": ["dirt", "grass"],
+    "left": ["dirt", "grass"],
+    "right": ["dirt", "grass"]
+  },
+  "grass": {
+    "up": ["dirt", "grass", "sand"],
+    "down": ["dirt", "grass", "sand"],
+    "left": ["dirt", "grass", "sand"],
+    "right": ["dirt", "grass", "sand"]
+  },
+  "sand": {
+    "up": ["sand", "grass"],
+    "down": ["sand", "grass"],
+    "left": ["sand", "grass"],
+    "right": ["sand", "grass"]
+  }
+}

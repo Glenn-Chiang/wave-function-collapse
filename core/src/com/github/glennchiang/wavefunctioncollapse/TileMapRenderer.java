@@ -19,8 +19,8 @@ public class TileMapRenderer {
         grid = new Rectangle(x, y, width, height);
     }
 
-    // Create cells based on the given tileMap's dimensions
-    public Rectangle[][] createCells(TileMap tileMap) {
+    // Create cell rectangles based on the given tileMap's dimensions
+    public Rectangle[][] createCellRectangles(TileMap tileMap) {
         Rectangle[][] cells = new Rectangle[tileMap.getRows()][tileMap.getCols()];
         int cellWidth = grid.width / tileMap.getCols();
         int cellHeight = grid.height / tileMap.getRows();
@@ -35,23 +35,23 @@ public class TileMapRenderer {
     }
 
     public void render(TileMap tileMap) {
-        Rectangle[][] cells = createCells(tileMap);
+        Rectangle[][] cellRectangles = createCellRectangles(tileMap);
 
         for (int i = 0; i < tileMap.getRows(); i++) {
             for (int j = 0; j < tileMap.getCols(); j++) {
-                Rectangle cell = cells[i][j];
+                Rectangle cellRect = cellRectangles[i][j];
 
-                SuperTile tile = tileMap.getTile(i, j);
+                Cell cell = tileMap.getCell(i, j);
                 // Draw cell outline if there is no tile at this position or the tile has not collapsed
-                if (tile == null || !tile.collapsed()) {
+                if (cell == null || !cell.collapsed()) {
                     shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
                     shapeRenderer.setColor(Color.WHITE);
-                    shapeRenderer.rect(cell.x, cell.y, cell.width, cell.height);
+                    shapeRenderer.rect(cellRect.x, cellRect.y, cellRect.width, cellRect.height);
                     shapeRenderer.end();
                 // Draw tile image if tile has collapsed
                 } else {
                     spriteBatch.begin();
-                    spriteBatch.draw(tile.collapsedTile().image, cell.x, cell.y, cell.width, cell.height);
+                    spriteBatch.draw(cell.collapsedTile().image, cellRect.x, cellRect.y, cellRect.width, cellRect.height);
                     spriteBatch.end();
                 }
             }

@@ -3,6 +3,7 @@ package com.github.glennchiang.wavefunctioncollapse;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.JsonReader;
 
 import java.util.*;
 
@@ -25,14 +26,20 @@ public class TileSetLoader {
     // Creates a TileSet from a given directory containing the corresponding tile images
     private TileSet loadTileSet(String name, String path) {
         List<Tile> tiles = new ArrayList<>();
+
         // Get the list of tile image files in the given tileset directory
         FileHandle[] imageFiles = Gdx.files.internal(path).list();
+
         // Create a Tile from each image file and add it to the list of tiles
         for (FileHandle imageFile: imageFiles) {
             String tileName = imageFile.nameWithoutExtension();
             Texture tileImage = new Texture(Gdx.files.internal(imageFile.path()));
             tiles.add(new Tile(tileName, tileImage));
         }
+
+        // Get the rules for the tile set
+        JsonReader reader = new JsonReader();
+
         return new TileSet(name, tiles);
     }
 
