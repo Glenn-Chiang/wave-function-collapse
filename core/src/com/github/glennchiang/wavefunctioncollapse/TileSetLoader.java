@@ -25,22 +25,24 @@ public class TileSetLoader {
 
     // Creates a TileSet from a given directory containing the corresponding tile images
     private TileSet loadTileSet(String name, String path) {
-        List<Tile> tiles = new ArrayList<>();
-
         // Get the list of tile image files in the given tileset directory
         FileHandle[] imageFiles = Gdx.files.internal(path).list();
+
+        TileSet tileSet = new TileSet(name);
 
         // Create a Tile from each image file and add it to the list of tiles
         for (FileHandle imageFile: imageFiles) {
             String tileName = imageFile.nameWithoutExtension();
             Texture tileImage = new Texture(Gdx.files.internal(imageFile.path()));
-            tiles.add(new Tile(tileName, tileImage));
+
+            // TODO: Get initial weight from json
+            tileSet.addTile(new Tile(tileName, tileImage), 1);
         }
 
         // Get the rules for the tile set
         JsonReader reader = new JsonReader();
 
-        return new TileSet(name, tiles);
+        return tileSet;
     }
 
     // Gets a tileset by name

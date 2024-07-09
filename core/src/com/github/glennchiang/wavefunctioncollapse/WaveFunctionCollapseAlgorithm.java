@@ -1,6 +1,7 @@
 package com.github.glennchiang.wavefunctioncollapse;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class WaveFunctionCollapseAlgorithm {
     public static List<TileMap> generate(TileSet tileSet, TileMap tileMap) {
@@ -8,16 +9,14 @@ public class WaveFunctionCollapseAlgorithm {
         for (int i = 0; i < tileMap.getRows(); i++) {
             for (int j = 0; j < tileMap.getCols(); j++) {
                 // Set the initial state of the SuperTile to include all tiles in the tileset
-                tileMap.setCell(i, j, new Cell(i, j, tileSet.getTiles()));
+                tileMap.setCell(i, j, new Cell(i, j, tileSet.tiles));
             }
         }
 
         // Save the successive states of the tilemap as the algorithm progresses
         List<TileMap> solutionStates = new ArrayList<>();
 
-        // Queue of tiles to propagate
         Queue<Cell> queue = new LinkedList<>();
-
         // Loop until all cells have collapsed
         while (!tileMap.collapsed()) {
             // Retrieve and remove first cell in queue
@@ -42,7 +41,7 @@ public class WaveFunctionCollapseAlgorithm {
 
                 // Reduce the states of each neighbor to only include states
                 // that are allowed to be adjacent to the current collapsed cell
-                List<Tile> allowedNeighbors = currentCell.collapsedTile().allowedNeighbors;
+                Map<Tile, Float> allowedNeighbors = currentCell.tile().getNeighborOptions(dir);
                 neighbor.reduce(allowedNeighbors);
                 // If neighbors was collapsed, add it to the queue to propagate the collapse
                 if (neighbor.collapsed()) {

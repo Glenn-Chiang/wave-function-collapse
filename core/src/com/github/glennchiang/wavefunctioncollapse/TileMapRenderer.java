@@ -51,7 +51,7 @@ public class TileMapRenderer {
                 // Draw tile image if tile has collapsed
                 } else {
                     spriteBatch.begin();
-                    spriteBatch.draw(cell.collapsedTile().image, cellRect.x, cellRect.y, cellRect.width, cellRect.height);
+                    spriteBatch.draw(cell.tile().image, cellRect.x, cellRect.y, cellRect.width, cellRect.height);
                     spriteBatch.end();
                 }
             }
