@@ -40,6 +40,7 @@ public class TileSetLoader {
         for (FileHandle imageFile: imageFiles) {
             String tileName = imageFile.nameWithoutExtension();
             Texture tileImage = new Texture(Gdx.files.internal(imageFile.path()));
+
             Tile tile = new Tile(tileName, tileImage);
             // Get the weight value from json
             float weight = ruleData.get(tileName).get("weight").asFloat();

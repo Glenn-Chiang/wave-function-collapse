@@ -2,9 +2,9 @@ package com.github.glennchiang.wavefunctioncollapse;
 
 public enum Direction {
     UP(0, -1),
+    RIGHT(1, 0),
     DOWN(0, 1),
-    LEFT(-1, 0),
-    RIGHT(1, 0);
+    LEFT(-1, 0);
 
     int x;
     int y;
@@ -15,6 +15,7 @@ public enum Direction {
 
     public Direction opposite() {
         for (Direction dir: Direction.values()) {
+            if (this == dir) continue;
             if ((x == dir.x && y == -dir.y) || (y == dir.y && x == -dir.x)) {
                 return dir;
             }
