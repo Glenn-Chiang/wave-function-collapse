@@ -7,9 +7,9 @@ import java.util.*;
 public class Cell {
     public final int row;
     public final int col;
-    private final Map<Tile, Float> states;
+    private final Set<Tile> states;
 
-    public Cell(int row, int col, Map<Tile, Float> states) {
+    public Cell(int row, int col, Set<Tile> states) {
         this.row = row;
         this.col = col;
         this.states = states;
@@ -19,21 +19,24 @@ public class Cell {
     public Cell(Cell cell) {
         this.row = cell.row;
         this.col = cell.col;
-        this.states = new HashMap<>(cell.states);
+        this.states = new HashSet<>(cell.states);
     }
 
-    public void collapse() {
+    // Collapse the cell into a single Tile
+    public void collapse(Map<Tile, Float> weightMap) {
         if (collapsed()) return;
-        // Randomly select one of the possible Tiles based on their weights,
-        // then remove all other tiles to reduce the Cell to a single state
-        Tile selectedTile = RandomUtils.weightedRandomSelect(states);
+        // Based on the given probability map, create a map of each of the Cell's possible states
+        // to the probability of selecting that state
+        Map<Tile, Float> stateProbabilities = new HashMap<>(weightMap);
+        stateProbabilities.keySet().retainAll(states);
+        Tile selectedTile = RandomUtils.weightedRandomSelect(stateProbabilities);
         states.clear();
-        states.put(selectedTile, 1f);
+        states.add(selectedTile);
     }
 
     // Remove states from the current set of states that are not also in the set of allowed states
-    public void reduce(Map<Tile, Float> allowedStates) {
-        states.keySet().retainAll(allowedStates.keySet());
+    public void reduce(Set<Tile> allowedStates) {
+        states.retainAll(allowedStates);
     }
 
     // The Cell is considered to be collapsed when it has been reduced to a single state
@@ -49,7 +52,7 @@ public class Cell {
     // If the Cell has collapsed, return the single Tile state that it has been reduced to
     public Tile tile() {
         if (collapsed()) {
-            return states.entrySet().iterator().next().getKey();
+            return states.iterator().next(); // Get the only Tile in the set
         } else {
             return null;
         }

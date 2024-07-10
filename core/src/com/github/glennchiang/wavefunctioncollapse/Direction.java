@@ -12,4 +12,13 @@ public enum Direction {
         this.x = x;
         this.y = y;
     }
+
+    public Direction opposite() {
+        for (Direction dir: Direction.values()) {
+            if ((x == dir.x && y == -dir.y) || (y == dir.y && x == -dir.x)) {
+                return dir;
+            }
+        }
+        return null;
+    }
 }

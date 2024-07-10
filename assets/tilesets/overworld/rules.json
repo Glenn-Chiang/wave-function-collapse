@@ -1,20 +1,14 @@
 {
-  "dirt": {
-    "up": ["dirt", "grass"],
-    "down": ["dirt", "grass"],
-    "left": ["dirt", "grass"],
-    "right": ["dirt", "grass"]
+  "0": {
+    "weight": 0.1,
+    "edges":["0", "0", "0", "0"]
   },
-  "grass": {
-    "up": ["dirt", "grass", "sand"],
-    "down": ["dirt", "grass", "sand"],
-    "left": ["dirt", "grass", "sand"],
-    "right": ["dirt", "grass", "sand"]
+  "1": {
+    "weight": 0.5,
+    "edges":["0", "0", "0", "0"]
   },
-  "sand": {
-    "up": ["sand", "grass"],
-    "down": ["sand", "grass"],
-    "left": ["sand", "grass"],
-    "right": ["sand", "grass"]
+  "2": {
+    "weight": 0.4,
+    "edges":["0", "0", "0", "0"]
   }
 }

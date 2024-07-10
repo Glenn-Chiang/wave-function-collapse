@@ -9,7 +9,7 @@ public class WaveFunctionCollapseAlgorithm {
         for (int i = 0; i < tileMap.getRows(); i++) {
             for (int j = 0; j < tileMap.getCols(); j++) {
                 // Set the initial state of the SuperTile to include all tiles in the tileset
-                tileMap.setCell(i, j, new Cell(i, j, tileSet.tiles));
+                tileMap.setCell(i, j, new Cell(i, j, new HashSet<>(tileSet.tiles.keySet())));
             }
         }
 
@@ -25,8 +25,8 @@ public class WaveFunctionCollapseAlgorithm {
             if (currentCell == null) {
                 currentCell = tileMap.getCells().stream().filter(cell -> !cell.collapsed())
                         .min(Comparator.comparingInt(Cell::getEntropy)).orElse(null);
-                // Collapse the selected tile
-                currentCell.collapse();
+                // Collapse the selected tile based on the probability weights defined by the tileset
+                currentCell.collapse(tileSet.tiles);
             }
 
             for (Direction dir : Direction.values()) {
@@ -41,7 +41,7 @@ public class WaveFunctionCollapseAlgorithm {
 
                 // Reduce the states of each neighbor to only include states
                 // that are allowed to be adjacent to the current collapsed cell
-                Map<Tile, Float> allowedNeighbors = currentCell.tile().getNeighborOptions(dir);
+                Set<Tile> allowedNeighbors = currentCell.tile().getNeighborOptions(dir);
                 neighbor.reduce(allowedNeighbors);
                 // If neighbors was collapsed, add it to the queue to propagate the collapse
                 if (neighbor.collapsed()) {

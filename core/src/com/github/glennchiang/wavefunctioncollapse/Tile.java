@@ -10,24 +10,24 @@ public class Tile {
 
     // Store the possible neighbors to this Tile for each direction
     // For each direction, each possible neighbor has a corresponding probability weight
-    private final Map<Direction, Map<Tile, Float>> neighborOptions = new HashMap<>();
+    private final Map<Direction, Set<Tile>> neighborOptions = new HashMap<>();
 
     public Tile(String name, Texture image) {
         this.name = name;
         this.image = image;
         // Initialize empty hashmap for each direction
         for (Direction direction: Direction.values()) {
-            neighborOptions.put(direction, new HashMap<>());
+            neighborOptions.put(direction, new HashSet<>());
         }
     }
 
     // Add a tile to the set of possible neighbors for the given direction, as well as its corresponding weight
-    public void addNeighborOptions(Direction direction, Tile tile, float weight) {
-        neighborOptions.get(direction).put(tile, weight);
+    public void addNeighborOptions(Direction direction, Tile tile) {
+        neighborOptions.get(direction).add(tile);
     }
 
     // Get the possible neighbors for the given direction, along with their weights
-    public Map<Tile, Float> getNeighborOptions(Direction direction) {
+    public Set<Tile> getNeighborOptions(Direction direction) {
         return neighborOptions.get(direction);
 
     }
