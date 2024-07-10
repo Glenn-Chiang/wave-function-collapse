@@ -41,7 +41,7 @@ public class WaveFunctionCollapse extends ApplicationAdapter {
 		stage.addActor(rootTable);
 
 		// Set up tile map with default dimensions 16 x 16
-		int[][] tileMapDimensions = {{8, 8}, {16, 16}, {32, 32}, {64, 64}};
+		int[][] tileMapDimensions = {{8, 8}, {16, 16}, {32, 32}};
 		tileMap = new TileMap(tileMapDimensions[0][0], tileMapDimensions[0][0]);
 
 		// Set up tile map display

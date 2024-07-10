@@ -1,6 +1,8 @@
 package com.github.glennchiang.wavefunctioncollapse;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
@@ -10,6 +12,7 @@ public class TileMapRenderer {
     private final Rectangle grid;
     private final ShapeRenderer shapeRenderer;
     private final SpriteBatch spriteBatch;
+    private final BitmapFont font = new BitmapFont();
 
     public TileMapRenderer(int x, int y, int width, int height, ShapeRenderer renderer, SpriteBatch spriteBatch) {
         this.shapeRenderer = renderer;
@@ -48,6 +51,19 @@ public class TileMapRenderer {
                     shapeRenderer.setColor(Color.WHITE);
                     shapeRenderer.rect(cellRect.x, cellRect.y, cellRect.width, cellRect.height);
                     shapeRenderer.end();
+
+                    // Show the entropy of the cell
+                    if (cell != null) {
+                        GlyphLayout glyphLayout = new GlyphLayout();
+                        String entropyText = String.valueOf(cell.getEntropy());
+                        glyphLayout.setText(font, entropyText);
+
+                        spriteBatch.begin();
+                        font.draw(spriteBatch, glyphLayout,
+                                cellRect.x + cellRect.width / 2 - glyphLayout.width / 2,
+                                cellRect.y + cellRect.height / 2 + glyphLayout.height / 2);
+                        spriteBatch.end();
+                    }
                 // Draw tile image if tile has collapsed
                 } else {
                     spriteBatch.begin();
