@@ -8,6 +8,7 @@ public class Cell {
     public final int row;
     public final int col;
     private final Set<Tile> states;
+    private boolean collapsed = false;
 
     public Cell(int row, int col, Set<Tile> states) {
         this.row = row;
@@ -20,11 +21,17 @@ public class Cell {
         this.row = cell.row;
         this.col = cell.col;
         this.states = new HashSet<>(cell.states);
+        this.collapsed = cell.collapsed;
     }
 
     // Collapse the cell into a single Tile
     public void collapse(Map<Tile, Float> weightMap) {
-        if (collapsed()) return;
+        if (collapsed) return;
+
+        if (getEntropy() == 1) {
+            collapsed = true;
+        }
+
         // Based on the given probability map, create a map of each of the Cell's possible states
         // to the probability of selecting that state
         Map<Tile, Float> stateProbabilities = new HashMap<>(weightMap);
@@ -32,6 +39,7 @@ public class Cell {
         Tile selectedTile = RandomUtils.weightedRandomSelect(stateProbabilities);
         states.clear();
         states.add(selectedTile);
+        collapsed = true;
     }
 
     // Remove states from the current set of states that are not also in the set of allowed states
@@ -41,7 +49,7 @@ public class Cell {
 
     // The Cell is considered to be collapsed when it has been reduced to a single state
     public boolean collapsed() {
-        return states.size() == 1;
+        return collapsed;
     }
 
     // The entropy of a Cell refers to the number of states/superpositions it currently has

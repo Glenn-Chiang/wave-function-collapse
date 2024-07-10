@@ -45,8 +45,13 @@ public class TileMapRenderer {
                 Rectangle cellRect = cellRectangles[i][j];
 
                 Cell cell = tileMap.getCell(i, j);
+
+                if (cell != null && cell.collapsed()) {
+                    spriteBatch.begin();
+                    spriteBatch.draw(cell.tile().image, cellRect.x, cellRect.y, cellRect.width, cellRect.height);
+                    spriteBatch.end();
                 // Draw cell outline if there is no tile at this position or the tile has not collapsed
-                if (cell == null || !cell.collapsed()) {
+                } else {
                     shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
                     shapeRenderer.setColor(Color.WHITE);
                     shapeRenderer.rect(cellRect.x, cellRect.y, cellRect.width, cellRect.height);
@@ -64,11 +69,6 @@ public class TileMapRenderer {
                                 cellRect.y + cellRect.height / 2 + glyphLayout.height / 2);
                         spriteBatch.end();
                     }
-                // Draw tile image if tile has collapsed
-                } else {
-                    spriteBatch.begin();
-                    spriteBatch.draw(cell.tile().image, cellRect.x, cellRect.y, cellRect.width, cellRect.height);
-                    spriteBatch.end();
                 }
             }
         }
