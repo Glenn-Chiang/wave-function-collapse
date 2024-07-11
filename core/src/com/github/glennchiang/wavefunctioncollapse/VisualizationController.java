@@ -12,7 +12,7 @@ public class VisualizationController {
     private Iterator<TileMap> stepIterator;
     private TileMap currentStep = null;
 
-    public final float[] stepIntervals = { 0.5f, 0.1f, 0.05f, 0f };
+    public final float[] stepIntervals = { 0.5f, 0.1f, 0f };
     private float stepInterval = stepIntervals[0];
     private float stepTimer = stepInterval;
 
@@ -29,6 +29,10 @@ public class VisualizationController {
 
     public void setTileSet(TileSet tileSet) {
         this.tileSet = tileSet;
+    }
+
+    public TileSet getTileSet() {
+        return tileSet;
     }
 
     public void setStepInterval(int index) {

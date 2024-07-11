@@ -73,8 +73,8 @@ public class TileSetLoader {
                     // Get the other tile's edge that is opposite to this edge
                     String complementaryEdge = otherTile.edges[direction.opposite().ordinal()];
 
-                    // If the opposite edges have the same label, the other tile can be adjacent to this tile
-                    // for this direction
+                    // If the opposite edges have the same label in the reverse sequence,
+                    // that the tiles can be adjacent to each other in this direction
                     String reversedComplementaryEdge = new StringBuilder(complementaryEdge).reverse().toString();
                     if (edge.equalsIgnoreCase(reversedComplementaryEdge)) {
                         tile.addNeighborOptions(direction, otherTile);

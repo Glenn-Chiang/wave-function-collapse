@@ -26,6 +26,7 @@ public class WidgetConfig {
             tileSets.add(entry.getKey());
         }
         SelectBox<String> tileSetSelectBox = widgetFactory.createSelectBox(tileSets);
+        tileSetSelectBox.setSelected(visualizer.getTileSet().name);
         tileSetSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
