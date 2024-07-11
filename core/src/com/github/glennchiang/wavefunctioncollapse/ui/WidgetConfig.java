@@ -9,6 +9,8 @@ import com.github.glennchiang.wavefunctioncollapse.TileSet;
 import com.github.glennchiang.wavefunctioncollapse.TileSetLoader;
 import com.github.glennchiang.wavefunctioncollapse.VisualizationController;
 
+import java.util.Map;
+
 // Uses WidgetFactory to create widgets
 // Positions widgets on the screen and registers event listeners for them
 public class WidgetConfig {
@@ -19,8 +21,9 @@ public class WidgetConfig {
 
         // Select box for tile sets
         Array<String> tileSets = new Array<>();
-        for (String tileSetName: tileSetLoader.getTileSets()) {
-            tileSets.add(tileSetName);
+
+        for (Map.Entry<String, TileSet> entry: tileSetLoader.tileSets.entrySet()) {
+            tileSets.add(entry.getKey());
         }
         SelectBox<String> tileSetSelectBox = widgetFactory.createSelectBox(tileSets);
         tileSetSelectBox.addListener(new ChangeListener() {

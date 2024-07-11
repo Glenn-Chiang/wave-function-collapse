@@ -22,16 +22,11 @@ public class WaveFunctionCollapseAlgorithm {
         // Save the successive states of the tilemap as the algorithm progresses
         List<TileMap> solutionStates = new ArrayList<>();
 
-        Queue<Cell> collapsedQueue = new LinkedList<>();
-
         // Loop until all cells have collapsed
         while (!tileMap.collapsed()) {
-            Cell currentCell = collapsedQueue.poll();
-            if (currentCell == null) {
-                // Select the cell with the lowest entropy among the cells that have not collapsed
-                currentCell = uncollapsedCells.stream().min(Comparator.comparingInt(Cell::getEntropy)).
+            Cell currentCell = uncollapsedCells.stream().min(Comparator.comparingInt(Cell::getEntropy)).
                         orElse(null);
-            }
+
             // Collapse the selected tile based on the probability weights defined by the tileset
             currentCell.collapse(tileSet.tiles);
             uncollapsedCells.remove(currentCell);
@@ -50,9 +45,6 @@ public class WaveFunctionCollapseAlgorithm {
                 // that are allowed to be adjacent to the current collapsed cell
                 Set<Tile> allowedNeighbors = currentCell.tile().getNeighborOptions(dir);
                 neighbor.reduce(allowedNeighbors);
-                if (neighbor.getEntropy() == 1 && !collapsedQueue.contains(neighbor)) {
-                    collapsedQueue.add(neighbor);
-                }
             }
 
             // Save a copy of the current state of the tilemap

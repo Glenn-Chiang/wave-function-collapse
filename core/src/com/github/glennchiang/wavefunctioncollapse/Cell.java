@@ -1,5 +1,5 @@
 package com.github.glennchiang.wavefunctioncollapse;
-import com.github.glennchiang.wavefunctioncollapse.utils.RandomUtils;
+import com.github.glennchiang.wavefunctioncollapse.utils.WaveFunctionCollapseUtils;
 import java.util.*;
 
 // A Cell contains multiple potential Tiles that it can be
@@ -32,11 +32,15 @@ public class Cell {
             collapsed = true;
         }
 
-        // Based on the given probability map, create a map of each of the Cell's possible states
-        // to the probability of selecting that state
+        // Randomly select one of the Cell's possible Tile states,
+        // taking into account the weights given by the weightMap
         Map<Tile, Float> stateProbabilities = new HashMap<>(weightMap);
         stateProbabilities.keySet().retainAll(states);
-        Tile selectedTile = RandomUtils.weightedRandomSelect(stateProbabilities);
+        Tile selectedTile = WaveFunctionCollapseUtils.weightedRandomSelect(stateProbabilities);
+        // TODO: What if there is no valid tile?
+        if (selectedTile == null) {
+            System.out.println("no valid tile");
+        }
         states.clear();
         states.add(selectedTile);
         collapsed = true;

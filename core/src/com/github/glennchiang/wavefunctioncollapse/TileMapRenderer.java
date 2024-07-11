@@ -48,7 +48,10 @@ public class TileMapRenderer {
 
                 if (cell != null && cell.collapsed()) {
                     spriteBatch.begin();
-                    spriteBatch.draw(cell.tile().image, cellRect.x, cellRect.y, cellRect.width, cellRect.height);
+                    Tile tile = cell.tile();
+                    spriteBatch.draw(tile.image, cellRect.x, cellRect.y,
+                            cellRect.width / 2f, cellRect.height / 2f,
+                            cellRect.width, cellRect.height, 1, 1, tile.rotation);
                     spriteBatch.end();
                 // Draw cell outline if there is no tile at this position or the tile has not collapsed
                 } else {
@@ -65,8 +68,8 @@ public class TileMapRenderer {
 
                         spriteBatch.begin();
                         font.draw(spriteBatch, glyphLayout,
-                                cellRect.x + cellRect.width / 2 - glyphLayout.width / 2,
-                                cellRect.y + cellRect.height / 2 + glyphLayout.height / 2);
+                                cellRect.x + cellRect.width / 2f - glyphLayout.width / 2,
+                                cellRect.y + cellRect.height / 2f + glyphLayout.height / 2);
                         spriteBatch.end();
                     }
                 }

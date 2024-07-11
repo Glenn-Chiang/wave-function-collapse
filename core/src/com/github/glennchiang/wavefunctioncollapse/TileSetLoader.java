@@ -3,6 +3,7 @@ package com.github.glennchiang.wavefunctioncollapse;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonValue;
 
@@ -11,7 +12,7 @@ import java.util.*;
 // Loads tile sets from the assets directory
 public class TileSetLoader {
     private static final String rootPath = "./tilesets"; // Path to directory containing all tilesets
-    private final Map<String, TileSet> tileSets = new HashMap<>();
+    public final Map<String, TileSet> tileSets = new HashMap<>();
 
     public TileSetLoader() {
         // Get the directories of all tile sets. Path is relative to assets folder
@@ -41,28 +42,36 @@ public class TileSetLoader {
             String tileName = imageFile.nameWithoutExtension();
             Texture tileImage = new Texture(Gdx.files.internal(imageFile.path()));
 
-            Tile tile = new Tile(tileName, tileImage);
+            JsonValue tileData = ruleData.get(tileName);
+
             // Get the weight value from json
-            float weight = ruleData.get(tileName).get("weight").asFloat();
-            tileSet.addTile(tile, weight);
+            float weight = tileData.get("weight").asFloat();
+
+            // Get the edge labels from json
+            String[] edges = tileData.get("edges").asStringArray();
+            // Get all distinct rotation configurations for this tile
+            List<String[]> configurations = getConfigurations(edges);
+
+            // Create a unique Tile object for each configuration of this tile asset
+            for (int i = 0; i < configurations.size(); i++) {
+                String[] configuration = configurations.get(i);
+                float rotation = - (float) i / edges.length * 360;
+                Tile tile = new Tile(tileImage, configuration, rotation);
+                tileSet.addTile(tile, weight);
+            }
         }
 
         Set<Tile> tiles = tileSet.tiles.keySet();
 
         for (Tile tile: tiles) {
-            // Each edge of the tile is given a string label
-            String[] edges = ruleData.get(tile.name).get("edges").asStringArray();
-
-            // For each edge of this tile, find all other tiles whose complementary edge has the same label
-            // as this edge
-            for (int i = 0; i < edges.length; i++) {
-                String edge = edges[i];
+            // For each edge of this tile, find all other tiles whose complementary edge has the same label as this edge
+            for (int i = 0; i < tile.edges.length; i++) {
+                String edge = tile.edges[i];
                 Direction direction = Direction.values()[i];
 
                 for (Tile otherTile: tiles) {
-                    String[] otherEdges = ruleData.get(otherTile.name).get("edges").asStringArray();
                     // Get the other tile's edge that is opposite to this edge
-                    String complementaryEdge = otherEdges[direction.opposite().ordinal()];
+                    String complementaryEdge = otherTile.edges[direction.opposite().ordinal()];
 
                     // If the opposite edges have the same label, the other tile can be adjacent to this tile
                     // for this direction
@@ -76,12 +85,41 @@ public class TileSetLoader {
         return tileSet;
     }
 
+    // Get all distinct; rotation configurations of the edges array
+    private List<String[]> getConfigurations(String[] edges) {
+        List<String[]> configurations = new ArrayList<>();
+        for (int i = 0; i < edges.length; i++) {
+            String[] configuration = rotateEdges(edges, i);
+            if (!containsConfiguration(configurations, configuration)) {
+                configurations.add(configuration);
+            }
+        }
+        return configurations;
+    }
+
+    // Check if a list of configurations already contains a configuration that is equal to the given configuration
+    private boolean containsConfiguration(List<String[]> configurations, String[] configuration) {
+        for (String[] config: configurations) {
+            // Check if all values are equal
+            if (Arrays.equals(config, configuration)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Move each edge by k places
+    private String[] rotateEdges(String[] edges, int k) {
+        String[] rotatedEdges = new String[edges.length];
+        for (int i = 0; i < edges.length; i++) {
+            rotatedEdges[(i + k) % edges.length] = edges[i];
+        }
+        return rotatedEdges;
+    }
+
     // Gets a tileset by name
     public TileSet getTileSet(String name) {
         return tileSets.get(name);
     }
 
-    public Set<String> getTileSets() {
-        return tileSets.keySet();
-    }
 }
