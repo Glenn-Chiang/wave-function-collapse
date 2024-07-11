@@ -1,10 +1,10 @@
 {
   "ground": {
-    "weight": 1,
+    "weight": 80,
     "edges": ["0", "0", "0", "0"]
   },
   "river": {
-    "weight": 1,
+    "weight": 5,
     "edges": ["1", "0", "1", "0"]
   },
   "riverturn": {
@@ -16,7 +16,7 @@
     "edges": ["1", "2", "1", "2"]
   },
   "road": {
-    "weight": 1,
+    "weight": 5,
     "edges": ["2", "0", "2", "0"]
   },
   "roadturn": {
@@ -28,7 +28,7 @@
     "edges": ["0", "2", "2", "2"]
   },
   "tower": {
-    "weight": 1,
+    "weight": 0.5,
     "edges": ["3", "3", "3", "3"]
   },
   "wall": {

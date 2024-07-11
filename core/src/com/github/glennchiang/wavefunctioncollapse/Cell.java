@@ -37,12 +37,11 @@ public class Cell {
         Map<Tile, Float> stateProbabilities = new HashMap<>(weightMap);
         stateProbabilities.keySet().retainAll(states);
         Tile selectedTile = WaveFunctionCollapseUtils.weightedRandomSelect(stateProbabilities);
-        // TODO: What if there is no valid tile?
-        if (selectedTile == null) {
-            System.out.println("no valid tile");
-        }
         states.clear();
-        states.add(selectedTile);
+        // If there is no valid tile, the cell will have an entropy of 0
+        if (selectedTile != null) {
+            states.add(selectedTile);
+        }
         collapsed = true;
     }
 
@@ -63,9 +62,10 @@ public class Cell {
 
     // If the Cell has collapsed, return the single Tile state that it has been reduced to
     public Tile tile() {
-        if (collapsed()) {
+        if (collapsed() && states.iterator().hasNext()) {
             return states.iterator().next(); // Get the only Tile in the set
         } else {
+            // If the Cell has not collapsed or there is no valid tile
             return null;
         }
     }

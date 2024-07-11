@@ -46,7 +46,7 @@ public class TileMapRenderer {
 
                 Cell cell = tileMap.getCell(i, j);
 
-                if (cell != null && cell.collapsed()) {
+                if (cell != null && cell.tile() != null && cell.collapsed()) {
                     spriteBatch.begin();
                     Tile tile = cell.tile();
                     spriteBatch.draw(tile.image, cellRect.x, cellRect.y,
@@ -55,10 +55,10 @@ public class TileMapRenderer {
                     spriteBatch.end();
                 // Draw cell outline if there is no tile at this position or the tile has not collapsed
                 } else {
-//                    shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//                    shapeRenderer.setColor(Color.WHITE);
-//                    shapeRenderer.rect(cellRect.x, cellRect.y, cellRect.width, cellRect.height);
-//                    shapeRenderer.end();
+                    shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+                    shapeRenderer.setColor(Color.WHITE);
+                    shapeRenderer.rect(cellRect.x, cellRect.y, cellRect.width, cellRect.height);
+                    shapeRenderer.end();
 
                     // Show the entropy of the cell
                     if (cell != null) {
@@ -73,10 +73,10 @@ public class TileMapRenderer {
                         spriteBatch.end();
                     }
                 }
-                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-                shapeRenderer.setColor(Color.WHITE);
-                shapeRenderer.rect(cellRect.x, cellRect.y, cellRect.width, cellRect.height);
-                shapeRenderer.end();
+//                shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//                shapeRenderer.setColor(Color.WHITE);
+//                shapeRenderer.rect(cellRect.x, cellRect.y, cellRect.width, cellRect.height);
+//                shapeRenderer.end();
             }
         }
 

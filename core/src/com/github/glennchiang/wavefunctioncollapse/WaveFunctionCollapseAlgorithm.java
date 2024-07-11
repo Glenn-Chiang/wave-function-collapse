@@ -43,8 +43,11 @@ public class WaveFunctionCollapseAlgorithm {
 
                 // Reduce the states of each neighbor to only include states
                 // that are allowed to be adjacent to the current collapsed cell
-                Set<Tile> allowedNeighbors = currentCell.tile().getNeighborOptions(dir);
-                neighbor.reduce(allowedNeighbors);
+                Tile collapsedTile = currentCell.tile();
+                if (collapsedTile != null) {
+                    Set<Tile> allowedNeighbors = collapsedTile.getNeighborOptions(dir);
+                    neighbor.reduce(allowedNeighbors);
+                }
             }
 
             // Save a copy of the current state of the tilemap
