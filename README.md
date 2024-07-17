@@ -1,5 +1,6 @@
 # wave-function-collapse
 A desktop application that procedurally generates tilemaps from input tilesets using the wave function collapse algorithm.
+
 https://github.com/user-attachments/assets/d7e0a8f8-3c3e-417a-83d3-50e43905f38d
 
 ## Usage
