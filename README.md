@@ -3,6 +3,11 @@ A desktop application that procedurally generates tilemaps from input tilesets u
 
 https://github.com/user-attachments/assets/d7e0a8f8-3c3e-417a-83d3-50e43905f38d
 
+## Download
+
+## Algorithm
+Once a tileset is selected, each cell in the grid is initialized as a superposition of multiple states as it has equal potential to be any one of the tiles at the same time. The algorithm begins by randomly selecting a cell and *collapsing* it into a single tile. To collapse a cell means to randomly select one of its remaining possible tile states and reduce its states to include only that selected tile. After this cell is collapsed into a tile, the states of the neighboring cells will also be reduced according to the adjacency rules of that tile. Next, the algorithm finds the cell with the least entropy - that is, the cell with the least number of states - and collapses it, which in turn reduces the states of its neighbors. This process then propagates throughout the grid until all cells have been collapsed to form a complete tilemap.
+
 ## Usage
 The repository contains a number of sample tilesets placed in directories under the `assets/tilesets` directory, where each tileset directory consists of a `tiles` directory and a `rules.json` file.  
 
