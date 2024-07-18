@@ -15,30 +15,27 @@ public class TileSetLoader {
     public final Map<String, TileSet> tileSets = new HashMap<>();
 
     public TileSetLoader() {
-        // Get the directories of all tile sets. Path is relative to assets folder
+        // Get list of tileset names from tilesets.txt file
+        FileHandle tileSetsFile = Gdx.files.internal("index.txt");
+        String[] tileSetNames = tileSetsFile.readString().split("\n");
 
-        FileHandle dirHandle = Gdx.files.internal("tilesets");
-        if (dirHandle.exists() && dirHandle.isDirectory()) {
-            // Array of tileset directories
-            FileHandle[] dirs = dirHandle.list();
-            // Create a TileSet for each subdirectory in the tilesets directory
-            for (FileHandle dir: dirs) {
-                TileSet tileSet = loadTileSet(dir.name(), dir.path());
-                tileSets.put(tileSet.name, tileSet);
-            }
+        // Create a TileSet for each subdirectory in the tilesets directory
+        for (String tileSetName: tileSetNames) {
+            FileHandle dir = Gdx.files.internal("tilesets/" + tileSetName.trim());
+            TileSet tileSet = loadTileSet(tileSetName, dir);
+            tileSets.put(tileSet.name, tileSet);
         }
     }
 
     // Creates a TileSet from a given directory containing the corresponding tile images
-    private TileSet loadTileSet(String name, String path) {
+    private TileSet loadTileSet(String name, FileHandle directory) {
         // Get the list of tile image files in the given tileset directory
         // e.g. assets/tilesets/overworld/tiles
-        FileHandle[] imageFiles = Gdx.files.internal(path + "/tiles").list();
-
+        FileHandle[] imageFiles = Gdx.files.internal(directory.path() + "/tiles").list();
         // Get the rules for the tile set
         // e.g. assets/tilesets/overworld/rules.json
         JsonReader reader = new JsonReader();
-        JsonValue ruleData = reader.parse(Gdx.files.internal(path + "/rules.json"));
+        JsonValue ruleData = reader.parse(Gdx.files.internal(directory.path() + "/rules.json"));
 
         TileSet tileSet = new TileSet(name);
 
