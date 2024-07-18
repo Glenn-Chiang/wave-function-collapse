@@ -52,7 +52,7 @@ public class WaveFunctionCollapse extends ApplicationAdapter {
 
 		// Load tile sets
 		TileSetLoader tileSetLoader = new TileSetLoader();
-		TileSet tileSet = tileSetLoader.getTileSet("castle");
+		TileSet tileSet = tileSetLoader.getFirst();
 
 		visualizer = new VisualizationController(tileMap, tileMapDisplay);
 		visualizer.setTileSet(tileSet);

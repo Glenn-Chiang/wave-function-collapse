@@ -1,6 +1,7 @@
 package com.github.glennchiang.wavefunctioncollapse;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.Array;
@@ -11,16 +12,20 @@ import java.util.*;
 
 // Loads tile sets from the assets directory
 public class TileSetLoader {
-    private static final String rootPath = "./tilesets"; // Path to directory containing all tilesets
     public final Map<String, TileSet> tileSets = new HashMap<>();
 
     public TileSetLoader() {
         // Get the directories of all tile sets. Path is relative to assets folder
-        FileHandle[] dirs = Gdx.files.internal(rootPath).list();
-        // Create a TileSet for each subdirectory in the tilesets directory
-        for (FileHandle dir: dirs) {
-            TileSet tileSet = loadTileSet(dir.name(), dir.path());
-            tileSets.put(tileSet.name, tileSet);
+
+        FileHandle dirHandle = Gdx.files.internal("tilesets");
+        if (dirHandle.exists() && dirHandle.isDirectory()) {
+            // Array of tileset directories
+            FileHandle[] dirs = dirHandle.list();
+            // Create a TileSet for each subdirectory in the tilesets directory
+            for (FileHandle dir: dirs) {
+                TileSet tileSet = loadTileSet(dir.name(), dir.path());
+                tileSets.put(tileSet.name, tileSet);
+            }
         }
     }
 
@@ -123,4 +128,11 @@ public class TileSetLoader {
         return tileSets.get(name);
     }
 
+    // Get first tileset
+    public TileSet getFirst() {
+        if (tileSets.entrySet().iterator().hasNext()) {
+            return tileSets.entrySet().iterator().next().getValue();
+        }
+        return null;
+    }
 }

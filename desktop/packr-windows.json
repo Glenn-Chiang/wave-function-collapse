@@ -1,0 +1,14 @@
+{
+  "platform": "windows64",
+  "jdk": "C:\\Program Files\\Java\\jdk-17",
+  "executable": "wave-function-collapse",
+  "classpath": [
+    "desktop/build/libs/desktop-1.0.jar"
+  ],
+  "mainclass": "com.github.glennchiang.wavefunctioncollapse.DesktopLauncher",
+  "vmargs": [
+    "-Xmx1G"
+  ],
+  "minimizejre": "soft",
+  "output": "desktop/dist/windows"
+}

@@ -53,7 +53,6 @@ public class WaveFunctionCollapseAlgorithm {
             // Save a copy of the current state of the tilemap
             solutionStates.add(new TileMap(tileMap));
         }
-        System.out.println(solutionStates.size());
         return solutionStates;
     }
 }
