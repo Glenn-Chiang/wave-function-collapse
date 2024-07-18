@@ -51,21 +51,6 @@ public class WidgetConfig {
         });
         Label gridLabel = widgetFactory.createLabel("Grid");
 
-        // Select box for visualizer speed
-        Array<String> speedOptions = new Array<>();
-        for (int i = 0; i < visualizer.stepIntervals.length; i++) {
-            String speedLabel = (i + 1) + "x";
-            speedOptions.add(speedLabel);
-        }
-        SelectBox<String> speedSelectBox = widgetFactory.createSelectBox(speedOptions);
-        speedSelectBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                visualizer.setStepInterval(speedSelectBox.getSelectedIndex());
-            }
-        });
-        Label speedLabel = widgetFactory.createLabel("Speed");
-
         // Run button
         Button runButton = widgetFactory.createButton("Run", Color.valueOf("#58D68D"));
         runButton.addListener(new ChangeListener() {
@@ -101,9 +86,6 @@ public class WidgetConfig {
 
         table.add(gridLabel).height(32).expandX();
         table.add(gridSelectBox).height(32).expandX().fill();
-
-        table.add(speedLabel).height(32).expandX();
-        table.add(speedSelectBox).height(32).expandX().fill();
 
         table.add(runButton).width(80).height(32).expandX().fill().right();
         table.add(resetButton).width(80).height(32).expandX().fill().right();

@@ -12,10 +12,6 @@ public class VisualizationController {
     private Iterator<TileMap> stepIterator;
     private TileMap currentStep = null;
 
-    public final float[] stepIntervals = { 0.5f, 0.1f, 0f };
-    private float stepInterval = stepIntervals[0];
-    private float stepTimer = stepInterval;
-
     public enum State {
         INACTIVE, RUNNING, COMPLETE
     }
@@ -35,17 +31,11 @@ public class VisualizationController {
         return tileSet;
     }
 
-    public void setStepInterval(int index) {
-        if (index < 0 || index >= stepIntervals.length) return;
-        stepInterval = stepIntervals[index];
-    }
-
     public void run() {
         if (state == State.RUNNING) {
             reset();
         }
         state = State.RUNNING;
-        stepTimer = stepInterval;
         // Generate a list of tilemap states that progress toward the final generated tilemap
         List<TileMap> solutionStates = WaveFunctionCollapseAlgorithm.generate(tileSet, tileMap);
         stepIterator = solutionStates.iterator();
@@ -66,20 +56,12 @@ public class VisualizationController {
             return;
         }
 
-        // Update timer each frame
-        stepTimer -= Gdx.graphics.getDeltaTime();
-
         // At every interval, advance to next state
-        if (stepTimer <= 0) {
-            currentStep = stepIterator.next();
-            // Reset timer for next interval
-            stepTimer = stepInterval;
-        }
+        currentStep = stepIterator.next();
     }
 
     public void reset() {
         state = State.INACTIVE;
-        stepTimer = stepInterval; // Reset timer
         stepIterator = null;
         currentStep = null;
         tileMap.clear();
